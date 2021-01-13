@@ -381,17 +381,11 @@ func (g *generator) GenerateMockMethods(mockType string, intf *model.Interface, 
 	}
 }
 
-func makeArgString(argNames, argTypes []string) string {
-	args := make([]string, len(argNames))
-	for i, name := range argNames {
-		// specify the type only once for consecutive args of the same type
-		if i+1 < len(argTypes) && argTypes[i] == argTypes[i+1] {
-			args[i] = name
-		} else {
-			args[i] = name + " " + argTypes[i]
-		}
+func argFieldName(arg string) string {
+	if arg[:3] == "arg" {
+		return strcase.ToCamel(arg)
 	}
-	return strings.Join(args, ", ")
+	return fmt.Sprintf("Arg%s", strcase.ToCamel(arg))
 }
 
 func (g *generator) GenerateFuncIO(mockType string, m *model.Method, pkgOverride string) error {
@@ -404,8 +398,9 @@ func (g *generator) GenerateFuncIO(mockType string, m *model.Method, pkgOverride
 	}
 
 	g.p("type %v struct {", m.Name)
+	g.p("Time int")
 	for i := range argNames {
-		g.p("%v %v", strcase.ToCamel(argNames[i]), argTypes[i])
+		g.p("%v %v", argFieldName(argNames[i]), argTypes[i])
 	}
 	for i, r := range rets {
 		g.p("%v %v", fmt.Sprintf("Ret%d", i), r)

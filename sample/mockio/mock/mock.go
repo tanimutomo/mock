@@ -9,15 +9,17 @@ import (
 )
 
 type Get struct {
-	Foo  int
-	Bar  string
-	Ret0 foo.Model
-	Ret1 error
+	Time   int
+	ArgFoo int
+	ArgBar string
+	Ret0   foo.Model
+	Ret1   error
 }
 
 type List struct {
-	Foos []int
-	Bars []string
-	Ret0 []foo.Model
-	Ret1 error
+	Time    int
+	ArgFoos []int
+	ArgBars []string
+	Ret0    []foo.Model
+	Ret1    error
 }
